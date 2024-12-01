@@ -1,6 +1,5 @@
 package com.PaymentGateway.payment.Controller;
 
-import com.PaymentGateway.payment.DTOS.UserDto;
 import com.PaymentGateway.payment.Entity.User;
 import com.PaymentGateway.payment.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,8 @@ public class UserController {
     @Autowired
     private UserService userService;
     @PostMapping("addUser")
-    public ResponseEntity<User> AddUser(@RequestBody UserDto userDto){
-        User user = userService.AddUser(userDto);
+    public ResponseEntity<User> AddUser(@RequestBody User user){
+        User user1 = userService.AddUser(user);
         return new ResponseEntity<>(user,HttpStatus.CREATED);
     }
 

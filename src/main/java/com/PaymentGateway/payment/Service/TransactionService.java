@@ -1,6 +1,6 @@
 package com.PaymentGateway.payment.Service;
 
-import com.PaymentGateway.payment.DTOS.TransactionDto;
+
 import com.PaymentGateway.payment.Entity.Transaction;
 import com.PaymentGateway.payment.Entity.User;
 
@@ -24,29 +24,33 @@ public class TransactionService {
     private UserRepository userRepository;
 
 
-    public Transaction AddTransactions(TransactionDto transactionDto) throws Exception{
-        Optional<User> optionalUser = userRepository.findById(transactionDto.getUserId());
-        if(!optionalUser.isPresent()){
-            throw new Exception("User not found");
+    public Transaction addTransaction(Transaction transaction) {
+        // Fetch the user based on the user ID from the transaction object
+        Optional<User> optionalUser = userRepository.findById(transaction.getUser().getUserId());
+
+        if (!optionalUser.isPresent()) {
+            throw new IllegalArgumentException("User not found with ID: " + transaction.getUser().getUserId());
         }
+
         User user = optionalUser.get();
-        Transaction transaction = new Transaction();
+
+        // Populate transaction fields
         transaction.setUser(user);
-        transaction.setAmount(transactionDto.getAmount());
         transaction.setTime(LocalTime.now());
         boolean isSuccess = new Random().nextBoolean();
+
         if (isSuccess) {
             transaction.setStatus(Status.SUCCESS);
-            transaction.setAmountDeducted(transactionDto.getAmount());
+            transaction.setAmountDeducted(transaction.getAmount());
         } else {
             transaction.setStatus(Status.FAILED);
-            transaction.setAmountDeducted(transactionDto.getAmount() * 0.5); // 50% deduction in case of failure
+            transaction.setAmountDeducted(transaction.getAmount() * 0.5); // 50% deduction on failure
         }
 
-
-
+        // Save and return the transaction
         return transactionRepository.save(transaction);
     }
+
 
     public int getTotalSuccessfulTransactions(Long userId) {
         List<Transaction> successfulTransactions = transactionRepository.findByUserUserIdAndStatus(userId, Status.SUCCESS);

@@ -1,6 +1,6 @@
 package com.PaymentGateway.payment.Controller;
 
-import com.PaymentGateway.payment.DTOS.TransactionDto;
+
 import com.PaymentGateway.payment.Entity.Transaction;
 import com.PaymentGateway.payment.Service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +15,11 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
     @PostMapping("addTransaction")
-    public ResponseEntity<Transaction> AddTransactions(@RequestBody TransactionDto transactionDto){
-        try {
-            Transaction transaction = transactionService.AddTransactions(transactionDto);
-            return new ResponseEntity<>(transaction, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Transaction> AddTransactions(@RequestBody Transaction transaction){
+
+        Transaction transaction1 = transactionService.addTransaction(transaction);
+        return new ResponseEntity<>(transaction, HttpStatus.CREATED);
+
     }
     @GetMapping("total-success/{userId}")
     public ResponseEntity<Integer> getTotalSuccessfulTransactions(@PathVariable Long userId) {

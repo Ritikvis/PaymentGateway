@@ -1,6 +1,5 @@
 package com.PaymentGateway.payment.Service;
 
-import com.PaymentGateway.payment.DTOS.UserDto;
 import com.PaymentGateway.payment.Entity.User;
 import com.PaymentGateway.payment.Rrepository.UserRepository;
 
@@ -14,11 +13,11 @@ public class UserService {
     private UserRepository userRepository;
 
 
-    public User AddUser(UserDto userDto) {
-        User user = new User();
-        user.setUserName(userDto.getName());
-        user.setEmail(userDto.getEmail());
-        user.setAccountNumber(userDto.getAccountNumber());
+    public User AddUser(User user) {
+        User user1 = new User();
+        user.setUserName(user1.getUserName());
+        user.setEmail(user1.getEmail());
+        user.setAccountNumber(user1.getAccountNumber());
         return userRepository.save(user);
     }
 }

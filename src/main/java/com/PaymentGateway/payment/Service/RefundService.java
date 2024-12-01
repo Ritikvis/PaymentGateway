@@ -1,6 +1,5 @@
 package com.PaymentGateway.payment.Service;
 
-import com.PaymentGateway.payment.DTOS.RefundDto;
 import com.PaymentGateway.payment.Entity.Refund;
 import com.PaymentGateway.payment.Entity.Transaction;
 import com.PaymentGateway.payment.Entity.User;
@@ -20,24 +19,27 @@ public class RefundService {
     private TransactionRepository transactionRepository;
     @Autowired
     private UserRepository userRepository;
-    public void createRefund(RefundDto refundDto) throws Exception {
-        Transaction transaction = transactionRepository.findById(refundDto.getTransactionId())
-                .orElseThrow(() -> new Exception("Transaction not found"));
+    public void createRefund(Refund refund) {
+        // Validate and fetch the associated transaction
+        Transaction transaction = transactionRepository.findById(refund.getTransaction().getTransactionId())
+                .orElseThrow(() -> new IllegalArgumentException("Transaction not found"));
 
+        // Check if refund can be created
         if (!transaction.getStatus().equals(Status.FAILED) || transaction.getAmountDeducted() == 0) {
-            throw new Exception("Cannot create refund for this transaction");
+            throw new IllegalArgumentException("Cannot create refund for this transaction");
         }
 
+        // Validate and fetch the associated user
+        User user = userRepository.findById(refund.getUser().getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        User user = userRepository.findById(refundDto.getUserId())
-                .orElseThrow(() -> new Exception("User not found"));
-
-        // Create and save the refund
-        Refund refund = new Refund();
+        // Populate refund fields
         refund.setAmount(transaction.getAmountDeducted());
         refund.setUser(user);
         refund.setTransaction(transaction);
 
+        // Save the refund
         refundRepository.save(refund);
     }
+
 }

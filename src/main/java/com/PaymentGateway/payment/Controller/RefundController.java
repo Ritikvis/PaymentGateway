@@ -1,6 +1,7 @@
 package com.PaymentGateway.payment.Controller;
 
-import com.PaymentGateway.payment.DTOS.RefundDto;
+
+import com.PaymentGateway.payment.Entity.Refund;
 import com.PaymentGateway.payment.Service.RefundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,12 +17,10 @@ public class RefundController {
     @Autowired
     private RefundService refundService;
     @PostMapping("addRefund")
-    public ResponseEntity<String> createRefund(@RequestBody RefundDto refundDto) {
-        try {
-            refundService.createRefund(refundDto);
-            return new ResponseEntity<>("Refund created successfully", HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<String> createRefund(@RequestBody Refund refund) {
+
+        refundService.createRefund(refund);
+        return new ResponseEntity<>("Refund created successfully", HttpStatus.CREATED);
+
     }
 }
