@@ -21,6 +21,7 @@ public class TransactionController {
         return new ResponseEntity<>(transaction, HttpStatus.CREATED);
 
     }
+//    http://localhost:8080/Transaction/total-success/1
     @GetMapping("total-success/{userId}")
     public ResponseEntity<Integer> getTotalSuccessfulTransactions(@PathVariable Long userId) {
         int totalAmount = transactionService.getTotalSuccessfulTransactions(userId);

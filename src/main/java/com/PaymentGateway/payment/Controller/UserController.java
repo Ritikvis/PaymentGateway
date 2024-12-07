@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("User")
 public class UserController {
+
+
+//    first add user then transaction then refund;
     @Autowired
     private UserService userService;
     @PostMapping("addUser")
